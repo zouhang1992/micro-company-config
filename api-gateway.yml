@@ -4,7 +4,7 @@ info:
     name: API Gateway
 
 management:
-  security: 
+  security:
     enabled: false
 
 # Define the port where the API gateway server would be running
@@ -14,15 +14,17 @@ server:
 # The OAuth2 server definition that would be used to send the authorization requests to
 authserver:
     hostname: localhost
-    port: 9999
-    contextPath: uaa
-    
+    port: 9000
+    contextPath: authserver/uaa
+
 # Define the routes which determine what URL are serviced by what applications.
 # The application/services are defined in the bootstrap.yml file of individual applications
 # using the spring.application.name property.
 
 zuul:
   routes:
+    authserver:
+      path: /authserver/**
     command-side-blog:
       path: /command/blog/**
     query-side-blog:
@@ -37,7 +39,7 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${vcap.services.registry.credentials.uri:http://localhost:8761}/eureka/
-      
+
 axon:
   eventhandling:
     processors:
@@ -55,6 +57,8 @@ spring:
     hostname: 127.0.0.1
     username: guest
     password: guest
+
+security:
   oauth2:
     sso:
       home:
@@ -88,7 +92,7 @@ spring:
       uri: mongodb://my-mongo:27017/blogposts
 
 eureka:
-# Register our microservices to Eureka using hostnames in a Docker environment will not work, they will all get 
+# Register our microservices to Eureka using hostnames in a Docker environment will not work, they will all get
 # one and the same hostname. Instead we configure them to use its IP address during registration with Eureka.
   instance:
     preferIpAddress: true
@@ -101,7 +105,7 @@ authserver:
   hostname: authserver
   port: 9999
   contextPath: uaa
-  
+
 ---
 spring:
   profiles: cloud
@@ -110,7 +114,7 @@ authserver:
   hostname: ${vcap.services.authserver.credentials.uri}
   port: 80
   contextPath: uaa
-  
+
 eureka:
   instance:
     hostname: ${vcap.application.uris[0]}
