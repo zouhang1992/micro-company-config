@@ -48,7 +48,7 @@ eureka:
       
 # The OAuth2 server definition that would be used to send the authorization requests to
 authserver:
-    hostname: authserver
+    hostname: localhost
     port: 9999
     contextPath: uaa
 
